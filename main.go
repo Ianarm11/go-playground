@@ -10,7 +10,9 @@ func main() {
 	//BasicArray()
 	//BasicSlice()
 	//ArraySliceExample()
-	BasicMap()
+	//BasicMap()
+	//BasicStruct()
+	EmbeddedStruct()
 }
 
 func StringForRangeLoop() {
@@ -128,4 +130,61 @@ func BasicMap() {
 	//To check if there is a value. Not nil, "", or 0
 	_, check := dictionary["Zurf"]
 	fmt.Println(check)
+}
+
+type Book struct {
+	Author string
+	Name string
+	Pages int
+}
+
+func BasicStruct() {
+	var kochland Book
+	kochland.Pages = 671
+	kochland.Author = "Christopher Leonard"
+	kochland.Name = "Kochland"
+
+	name := &kochland.Name
+	*name = *name + ": The Secret History of Corporate America"
+	fmt.Printf("Name of book (pointer): %s\n\n", *name)
+}
+
+type Circle struct {
+	X int
+	Y int
+	Radius int
+}
+
+type Wheel struct {
+	Circle
+	Spokes int
+}
+
+type Fan struct {
+	Circle Circle
+	Blades int
+}
+
+func EmbeddedStruct() {
+	var circle Circle
+	var wheel Wheel
+	var fan Fan
+
+	circle.Y = 10
+	circle.X = 5
+	circle.Radius = 80
+
+	wheel.Circle = circle
+	wheel.Spokes = 20
+	wheel.Y = 500
+	wheel.X = 100
+	wheel.Radius = 200000
+
+	fmt.Printf("wheel.Circle: %d wheel.Spokes: %d \n\n", wheel.Circle, wheel.Spokes)
+	fan.Circle = circle
+	fan.Blades = 17
+	fan.Circle.X = 777
+	fan.Circle.Y = 888
+	fan.Circle.Radius = 999
+	fmt.Printf("fan.Circle: %d fan.Blades: %d \n\n", fan.Circle, fan.Blades)
 }
