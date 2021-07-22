@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 func main() {
 	fmt.Println("Hello, World. Welcome to main.go!")
@@ -12,7 +15,8 @@ func main() {
 	//ArraySliceExample()
 	//BasicMap()
 	//BasicStruct()
-	EmbeddedStruct()
+	//EmbeddedStruct()
+	InterfaceExample()
 }
 
 func StringForRangeLoop() {
@@ -132,12 +136,6 @@ func BasicMap() {
 	fmt.Println(check)
 }
 
-type Book struct {
-	Author string
-	Name string
-	Pages int
-}
-
 func BasicStruct() {
 	var kochland Book
 	kochland.Pages = 671
@@ -149,22 +147,21 @@ func BasicStruct() {
 	fmt.Printf("Name of book (pointer): %s\n\n", *name)
 }
 
+//------Stucts------//
+
 type Circle struct {
 	X int
 	Y int
 	Radius int
 }
-
 type Wheel struct {
 	Circle
 	Spokes int
 }
-
 type Fan struct {
 	Circle Circle
 	Blades int
 }
-
 func EmbeddedStruct() {
 	var circle Circle
 	var wheel Wheel
@@ -187,4 +184,41 @@ func EmbeddedStruct() {
 	fan.Circle.Y = 888
 	fan.Circle.Radius = 999
 	fmt.Printf("fan.Circle: %d fan.Blades: %d \n\n", fan.Circle, fan.Blades)
+}
+
+//-----Interfaces-----//
+
+type Book struct {
+	Author string
+	Name string
+	Pages int
+}
+type Magazine struct {
+	Author string
+	Title string
+	Pages int
+}
+
+func (b Book) Read() string {
+	output := "Title: " + b.Name + " Author: " + b.Author + " Pages: " + strconv.Itoa(b.Pages)
+	return output
+}
+func (m Magazine) Read() string {
+	output := "Title: " + m.Title + " Author: " + m.Author + " Pages: " + strconv.Itoa(m.Pages)
+	return output
+}
+
+type Reader interface {
+	Read() string
+}
+
+func PrintContents(r Reader) {
+	fmt.Println(r.Read())
+}
+
+func InterfaceExample() {
+	book := Book{"David J Armstrong", "Kochland", 651}
+	magazine := Magazine{"John E Ross", "The Vagabonds", 350}
+	PrintContents(book)
+	PrintContents(magazine)
 }
