@@ -1,7 +1,6 @@
 package main
 
 import (
-	data_structures "data-structures"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -10,19 +9,25 @@ import (
 const portNumber = ":8080"
 
 func main() {
-	//http.HandleFunc("/", Home)
-	//http.HandleFunc("/about", About)
+	http.HandleFunc("/", Home)
+	http.HandleFunc("/about", About)
 
-	//_ = http.ListenAndServe(portNumber, nil)
+	_ = http.ListenAndServe(portNumber, nil)
 
-	list := data_structures.List{}
+	/*list := data_structures.List{}
 	list.Push(2)
 	list.Push(3)
 	list.Push(1)
 	list.Push(400)
-	list.Push("Hello")
-	list.DisplayTail()
-	list.Display()
+	list.ReverseList(list.GetHead())*/
+
+	/*queue := data_structures.Queue{}
+	queue = queue.Enqueue(1)
+	queue = queue.Enqueue(3)
+	queue = queue.Enqueue(60)
+	queue = queue.Dequeue()
+	queue = queue.Enqueue(4)
+	queue.Display()*/
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
