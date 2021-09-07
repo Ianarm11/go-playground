@@ -1,6 +1,7 @@
 package main
 
 import (
+	data_structures "data-structures"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -9,10 +10,19 @@ import (
 const portNumber = ":8080"
 
 func main() {
-	http.HandleFunc("/", Home)
-	http.HandleFunc("/about", About)
+	//http.HandleFunc("/", Home)
+	//http.HandleFunc("/about", About)
 
-	_ = http.ListenAndServe(portNumber, nil)
+	//_ = http.ListenAndServe(portNumber, nil)
+
+	list := data_structures.List{}
+	list.Push(2)
+	list.Push(3)
+	list.Push(1)
+	list.Push(400)
+	list.Push("Hello")
+	list.DisplayTail()
+	list.Display()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {

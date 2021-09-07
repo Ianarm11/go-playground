@@ -1,3 +1,3 @@
-module example.com/user/hello
+module github.com/Ianarm11/go-playground
 
 go 1.15
