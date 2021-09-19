@@ -8,20 +8,55 @@ import (
 )
 
 const portNumber = ":8080"
+var userInfoArray []UserInfo
+var tpl *template.Template
 
 func main() {
 	http.HandleFunc("/", Home)
-	//http.HandleFunc("/about", About)
+	http.HandleFunc("/next", Next)
+	http.HandleFunc("/info", Info)
 
 	_ = http.ListenAndServe(portNumber, nil)
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "home.page.tmpl")
+	//renderTemplate(w, "home.page.tmpl")
+	tpl.ExecuteTemplate(w, "home.page.tmpl", nil)
 }
 
-func About(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "about.page.tmpl")
+func Next(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		tpl.ExecuteTemplate(w, "home.page.tmpl", nil)
+	}
+
+	if r.Method == "POST" {
+		db := UserInfo{
+			Username: r.FormValue("username"),
+			Password: r.FormValue("password"),
+			Firstname: r.FormValue("firstname"),
+			Lastname: r.FormValue("lastname"),
+			Email: r.FormValue("email"),
+		}
+		userInfoArray = append(userInfoArray, db)
+		fmt.Println("Here")
+		err := tpl.ExecuteTemplate(w, "next.page.tmpl", db)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+func Info(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		tpl.ExecuteTemplate(w, "home.page.tmpl", nil)
+	}
+
+	if r.Method == "POST" {
+		db := userInfoArray[0]
+		err := tpl.ExecuteTemplate(w, "info.page.tmpl", db)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string) {
@@ -38,4 +73,16 @@ func renderTemplate(w http.ResponseWriter, tmpl string) {
 		fmt.Println("Error in parsing templates. Error Output: ")
 		fmt.Println(parsingFilesErr)
 	}
+}
+
+func init() {
+	tpl = template.Must(template.ParseGlob("templates/*.tmpl"))
+}
+
+type UserInfo struct {
+	Username string
+	Password string
+	Firstname string
+	Lastname string
+	Email string
 }

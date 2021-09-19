@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>About</title>
+</head>
+<body>
+<h1>Your information is processed!</h1>
+<h2>Here is your First name, Last name, and Email</h2>
+<p>
+    {{ .Firstname }}
+    {{ .Lastname }}
+    {{ .Email }}
+</p>
+<h2>Enter your User Name and Password below to retreive all of your information</h2>
+<form action="/info" method="POST">
+    <label for="user2">Input User Name:</label>
+    <input type="text" name="username2" id="user2">
+
+    <label for="password2">Input Password:</label>
+    <input type="password" name="password2" id="password2">
+
+    <input type="submit">
+</form>
+</body>
+</html>
