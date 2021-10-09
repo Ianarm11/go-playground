@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	text_file_reader "go-playground/go-playground/text-file-reader"
 	"html/template"
 	"net/http"
 	"os"
@@ -12,18 +13,18 @@ var userInfoArray []UserInfo
 var tpl *template.Template
 
 func main() {
-	http.HandleFunc("/", Home)
+	/*http.HandleFunc("/", Home)
 	http.HandleFunc("/next", Next)
 	http.HandleFunc("/info", Info)
 
-	_ = http.ListenAndServe(portNumber, nil)
+	_ = http.ListenAndServe(portNumber, nil)*/
+	text_file_reader.Bigdog()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	//renderTemplate(w, "home.page.tmpl")
 	tpl.ExecuteTemplate(w, "home.page.tmpl", nil)
 }
-
 func Next(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		tpl.ExecuteTemplate(w, "home.page.tmpl", nil)
@@ -58,7 +59,6 @@ func Info(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 func renderTemplate(w http.ResponseWriter, tmpl string) {
 	homeDirectory, _ := os.Getwd()
 	parsedTemplate, parsingFilesErr := template.ParseFiles(homeDirectory + "/templates/" + tmpl)
