@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/info", Info)
 
 	_ = http.ListenAndServe(portNumber, nil)*/
-	text_file_reader.Bigdog()
+	text_file_reader.TextReader()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -74,11 +74,9 @@ func renderTemplate(w http.ResponseWriter, tmpl string) {
 		fmt.Println(parsingFilesErr)
 	}
 }
-
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*.tmpl"))
 }
-
 type UserInfo struct {
 	Username string
 	Password string
