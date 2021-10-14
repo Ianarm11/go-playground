@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	text_file_reader "go-playground/go-playground/text-file-reader"
+	excel_reader "go-playground/go-playground/excel-reader"
 	"html/template"
 	"net/http"
 	"os"
@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/info", Info)
 
 	_ = http.ListenAndServe(portNumber, nil)*/
-	text_file_reader.TextReader()
+	excel_reader.ExcelReader()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {

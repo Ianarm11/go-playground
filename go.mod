@@ -1,3 +1,3 @@
-module github.com/Ianarm11/go-playground
+module go-playground/go-playground
 
 go 1.15
