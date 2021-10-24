@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	excel_reader "go-playground/go-playground/excel-reader"
+	automated_requirements "go-playground/go-playground/automated-requirements"
 	"html/template"
 	"net/http"
 	"os"
@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/info", Info)
 
 	_ = http.ListenAndServe(portNumber, nil)*/
-	excel_reader.ExcelReader()
+	automated_requirements.AutomateRequirements()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
