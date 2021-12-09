@@ -17,7 +17,7 @@ type TraceObj struct {
 }
 
 func AutomateRequirements() {
-	file := GetTextFile("requirements-3nfr-60fr.txt")
+	file := GetTextFile("run3-input.txt")
 	wordsInFile := Gather(file)
 	NFRs, FRs := Sort(wordsInFile)
 	NFRs, FRs = Clean(NFRs, FRs)
@@ -39,6 +39,7 @@ func OutputResults(results []TraceObj) {
 		for _, res := range results {
 			f.WriteString(strings.Join(res.values, ","))
 			f.WriteString("\n")
+			f.WriteString("\n")
 		}
 	}
 	fmt.Println("End writing..")
@@ -51,8 +52,23 @@ func JackardPercent(sharedMembers int, totalMembers int) float64 {
 }
 
 func Threshold(percent float64) string {
-	var x int = 0
-	if percent < 17.00 {
+	var x = 0
+	// **WITHOUT CLEANED SPACES
+	//15.00 get Recall=.809 Precision=.323
+	//14.50 get Recall=.825 Precision=.321
+	//14.00 get Recall=.825 Precision=.321
+
+	//WITH CLEAN SPACES
+	//14.00 get Recall=.33 Precision=.33
+	//9.00 get Recall=.66 Precision=.39
+	//8.00 get Recall=.71 Precision=.35
+	//7.00 get Recall=.77 Precision=.33
+
+	//WITH NO S's
+	//8.00 get Recall=.82 Precision=.37
+	//9.00 get Recall=.82 Precision=.42
+
+	if percent <= 9.00 {
 		x = 0
 	} else {
 		x = 1
@@ -76,6 +92,10 @@ func Trace(NFRs [][]string, FRs [][]string) []TraceObj {
 					}
 				}
 			}
+			//fmt.Println(FR)
+			//fmt.Println(NFR)
+			//fmt.Println("Score for " + FR[0] + " on the " + NFR[0])
+			//fmt.Println(score)
 			overTotal := len(FR) + len(NFR)
 			trace.values = append(trace.values, Threshold(JackardPercent(score, overTotal)))
 			DataSet = append(DataSet, JackardPercent(score, overTotal))
@@ -83,7 +103,7 @@ func Trace(NFRs [][]string, FRs [][]string) []TraceObj {
 		}
 		traceResults = append(traceResults, trace)
 	}
-	Median(DataSet)
+	//Mean(DataSet)
 	return traceResults
 }
 
@@ -99,6 +119,7 @@ func Clean(NFRs [][]string, FRs [][]string) ([][]string, [][]string) {
 				NFR[i] = strings.ReplaceAll(NFR[i], "the", "")
 				NFR[i] = strings.ReplaceAll(NFR[i], "The", "")
 			}
+			NFR[i] = TrimSuffix(NFR[i], "s")
 		}
 	}
 	for _, FR := range FRs {
@@ -111,9 +132,36 @@ func Clean(NFRs [][]string, FRs [][]string) ([][]string, [][]string) {
 				FR[i] = strings.ReplaceAll(FR[i], "the", "")
 				FR[i] = strings.ReplaceAll(FR[i], "The", "")
 			}
+			FR[i] = TrimSuffix(FR[i], "s")
 		}
 	}
+	NFRs, FRs = CleanSpaces(NFRs, FRs)
 	return NFRs, FRs
+}
+
+func CleanSpaces(NFRs [][]string, FRs [][]string) ([][]string, [][]string) {
+	var newNFRs [][]string
+	var newFRs [][]string
+
+	for _, NFR := range NFRs {
+		var tempNFRs []string
+		for i := 0; i < len(NFR); i++ {
+			if len(NFR[i]) != 0 {
+				tempNFRs = append(tempNFRs, NFR[i])
+			}
+		}
+		newNFRs = append(newNFRs, tempNFRs)
+	}
+	for _, FR := range FRs {
+		var tempFRs []string
+		for i := 0; i < len(FR); i++ {
+			if len(FR[i]) != 0 {
+				tempFRs = append(tempFRs, FR[i])
+			}
+		}
+		newFRs = append(newFRs, tempFRs)
+	}
+	return newNFRs, newFRs
 }
 
 func Sort(words []string) ([][]string, [][]string) {
@@ -176,11 +224,18 @@ func GetTextFile(fileName string) *os.File {
 	}
 }
 
-func Median(values []float64) {
+func Mean(values []float64) {
 	sum := 0.00
 	for _, val := range values {
 		sum += val
 	}
 	median := math.Round( sum / float64(len(values)) )
 	fmt.Println(median)
+}
+
+func TrimSuffix(s, suffix string) string {
+	if strings.HasSuffix(s, suffix) {
+		s = s[:len(s)-len(suffix)]
+	}
+	return s
 }

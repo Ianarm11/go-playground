@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	automated_requirements "go-playground/go-playground/automated-requirements"
+	"go-playground/go-playground/leetcode"
 	"html/template"
 	"net/http"
 	"os"
@@ -18,7 +18,7 @@ func main() {
 	http.HandleFunc("/info", Info)
 
 	_ = http.ListenAndServe(portNumber, nil)*/
-	automated_requirements.AutomateRequirements()
+	leetcode.LeetCode()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
