@@ -8,38 +8,10 @@ type ListNode struct {
 }
 
 func LeetCode() {
-
-	var list1 ListNode
-	var list1two ListNode
-	var list1four ListNode
-
-	list1.Val = 1
-	list1two.Val = 2
-	list1four.Val = 4
-
-	list1.Next = &list1two
-	list1two.Next = &list1four
-	list1four.Next = nil
-
-	var list2 ListNode
-	var list2three ListNode
-	var list2four ListNode
-	var list2five ListNode
-
-	list2.Val = 1
-	list2three.Val = 3
-	list2four.Val = 4
-	list2five.Val = 5
-
-	list2.Next = &list2three
-	list2three.Next = &list2four
-	list2four.Next = &list2five
-	list2five.Next = nil
-	head := MergeTwoSortedList(&list1, &list2)
-	for head != nil {
-		fmt.Println(head.Val)
-		head = head.Next
-	}
+	x := []int{1,1,1,1,1,11,1,1,1,2}
+	fmt.Println("Original Array : ", x)
+	size := RemoveDuplicatesFromArray(x)
+	fmt.Println("Size of modified array: ", size)
 }
 
 func CheckIfPalindrome(str string) bool {
@@ -82,5 +54,25 @@ func MergeTwoSortedList(listHead1 *ListNode, listHead2 *ListNode) *ListNode {
 
 	fmt.Println("***************")
 	return mergedList.Next
+}
+
+func RemoveDuplicatesFromArray(nums []int) int {
+	for i := 0; i < len(nums); i++ {
+		for j := i+1; j < len(nums); j++ {
+			if nums[i] == nums[j] {
+				nums = RemoveElementByIndex(nums, j)
+				j--
+				fmt.Println(nums)
+			}
+		}
+	}
+	fmt.Println(nums)
+	return len(nums)
+}
+
+func RemoveElementByIndex(x []int, index int) []int {
+	ret := make([]int, 0)
+	ret = append(ret, x[:index]...)
+	return append(ret, x[index+1:]...)
 }
 
