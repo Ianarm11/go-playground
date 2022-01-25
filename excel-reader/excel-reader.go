@@ -2,7 +2,7 @@ package excel_reader
 
 import (
 	"fmt"
-	"github.com/xuri/excelize"
+	"github.com/xuri/excelize/v2"
 )
 
 var path = "/Users/IansIpad/Projects/goworkspace/src/go-playground/go-playground/text-files/"
