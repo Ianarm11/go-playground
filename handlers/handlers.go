@@ -36,7 +36,7 @@ func Previews(w http.ResponseWriter, r *http.Request) {
 	//Will be a lists of Previews (obj) that store the title, date, and summary
 	response, err := http.Get("http://localhost:8080/getpreviews")
 	if err != nil {
-		fmt.Println("Error: GET request in Previews endpoint")
+		fmt.Println("Error: GET request in Previews endpoint. Test")
 	}
 	defer response.Body.Close()
 
