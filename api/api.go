@@ -37,7 +37,7 @@ func GetPreviews(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Info: hitting GetPreviews api call")
 
 		//Make DB call to get data. Using dummy data now
-		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1"}
+		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert/"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
@@ -54,7 +54,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Info: hitting GetPost api call")
 
 		//Make DB call to get data. Using dummy data now
-		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1"}
+		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert/"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
@@ -69,7 +69,8 @@ type PreviewPacket struct {
 	Title   string `json:"title"`
 	Date    int    `json:"date"`
 	Summary string `json:"summary"`
-	Id      string `josn:"id"`
+	Id      string `json:"id"`
+	Url     string `json:"url"`
 }
 
 type PostPacket struct {
@@ -77,6 +78,7 @@ type PostPacket struct {
 	Date  int    `json:"date"`
 	Body  string `json:"summary"`
 	Id    string `josn:"id"`
+	Url   string `json:"url"`
 }
 
 type Preview struct {
@@ -84,6 +86,7 @@ type Preview struct {
 	Date    int
 	Summary string
 	Id      string
+	Url     string
 }
 
 type Post struct {
@@ -91,4 +94,5 @@ type Post struct {
 	Date  int
 	Body  string
 	Id    string
+	Url   string
 }
