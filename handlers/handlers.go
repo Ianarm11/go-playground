@@ -4,16 +4,34 @@ package handlers
 import (
 	"fmt"
 	api "go-playground/go-playground/api"
+	url "go-playground/go-playground/urlservice"
 	"html/template"
 	"net/http"
 )
 
 func SetHandlers() {
+	SetStaticHandlers()
+	SetDynamicHandlers()
+}
+
+func SetStaticHandlers() {
 	http.HandleFunc("/", Home)
-	http.HandleFunc("/home/", Home)
+	http.HandleFunc("/home", Home)
 	http.HandleFunc("/aboutme/", AboutMe)
 	http.HandleFunc("/posts/", Previews)
-	http.HandleFunc("/posts/{id}", Post)
+}
+
+func SetDynamicHandlers() {
+	urls := url.GetUrls()
+
+	for _, url := range urls {
+		fmt.Println(url)
+		http.HandleFunc(url.Url, DynamicHandler)
+	}
+}
+
+func DynamicHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("we are hitting it baby")
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {

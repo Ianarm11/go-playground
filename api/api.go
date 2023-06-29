@@ -34,7 +34,6 @@ func DecodePost(response *http.Response) Post {
 
 func GetPreviews(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		//Log entry point
 		fmt.Println("Info: hitting GetPreviews api call")
 
 		//Make DB call to get data. Using dummy data now
