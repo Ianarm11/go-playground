@@ -18,7 +18,7 @@ func SetStaticHandlers() {
 	//http.HandleFunc("/", Home)
 	http.HandleFunc("/home", Home)
 	http.HandleFunc("/aboutme/", AboutMe)
-	http.HandleFunc("/posts/", Previews)
+	http.HandleFunc("/posts", Previews)
 }
 
 func SetDynamicHandlers() {
@@ -34,7 +34,7 @@ func DynamicHandler(w http.ResponseWriter, r *http.Request) {
 	temp := template.Must(template.ParseFiles(Constants.DynamicTemplate))
 
 	//Get the id from url
-	id := r.Header.Get("url")
+	id := r.Header.Get("Url")
 	fmt.Println("Post Id: " + id)
 
 	//Make GET request to get title, date, and body

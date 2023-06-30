@@ -3,6 +3,6 @@
         "Url": "/posts/testurl/"
     },
     {
-        "Url": "/posts/bronzeagepervert/"
+        "Url": "/posts?id=bronzeagepervert"
     }
 ]

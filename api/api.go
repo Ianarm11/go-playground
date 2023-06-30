@@ -37,7 +37,7 @@ func GetPreviews(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Info: hitting GetPreviews api call")
 
 		//Make DB call to get data. Using dummy data now
-		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert/"}
+		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "?id=bronzeagepervert"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
@@ -54,7 +54,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Info: hitting GetPost api call")
 
 		//Make DB call to get data. Using dummy data now
-		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert/"}
+		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "?id=bronzeagepervert"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
