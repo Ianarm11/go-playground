@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	mux "github.com/gorilla/mux"
 )
 
-func SetApiHandlers() {
-	http.HandleFunc("/getpreviews/", GetPreviews)
-	http.HandleFunc("/getpost/{id}", GetPost)
+func SetApiHandlers(r *mux.Router) {
+	r.HandleFunc("/getposts/", GetPosts)
+	r.HandleFunc("/getpost/{title}", GetPost)
 }
 
 func DecodePreview(response *http.Response) Preview {
@@ -32,12 +34,11 @@ func DecodePost(response *http.Response) Post {
 	return Post
 }
 
-func GetPreviews(w http.ResponseWriter, r *http.Request) {
+func GetPosts(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		fmt.Println("Info: hitting GetPreviews api call")
 
 		//Make DB call to get data. Using dummy data now
-		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "?id=bronzeagepervert"}
+		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
@@ -50,11 +51,10 @@ func GetPreviews(w http.ResponseWriter, r *http.Request) {
 
 func GetPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		//Log entry point
-		fmt.Println("Info: hitting GetPost api call")
+		//title := mux.Vars(r)["title"]
 
 		//Make DB call to get data. Using dummy data now
-		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "?id=bronzeagepervert"}
+		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert"}
 
 		//Send out the encoded data
 		w.Header().Set("Content-Type", "application/json")
@@ -76,7 +76,7 @@ type PreviewPacket struct {
 type PostPacket struct {
 	Title string `json:"title"`
 	Date  int    `json:"date"`
-	Body  string `json:"summary"`
+	Body  string `json:"body"`
 	Id    string `josn:"id"`
 	Url   string `json:"url"`
 }

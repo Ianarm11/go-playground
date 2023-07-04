@@ -4,94 +4,66 @@ import (
 	"fmt"
 	api "go-playground/go-playground/api"
 	Constants "go-playground/go-playground/constants"
-	url "go-playground/go-playground/urlservice"
 	"html/template"
 	"net/http"
+
+	mux "github.com/gorilla/mux"
 )
 
-func SetHandlers() {
-	SetStaticHandlers()
-	SetDynamicHandlers()
-}
+var Serve http.Handler
 
-func SetStaticHandlers() {
-	//http.HandleFunc("/", Home)
-	http.HandleFunc("/home", Home)
-	http.HandleFunc("/aboutme/", AboutMe)
-	http.HandleFunc("/posts", Previews)
-}
+func SetHandlers(r *mux.Router) {
+	r.HandleFunc("/", Home).Methods("GET")
+	r.HandleFunc("/home", Home).Methods("GET")
+	r.HandleFunc("/aboutme/", AboutMe)
+	r.HandleFunc("/posts/", Posts)
+	r.HandleFunc("/posts/{title}/", Post)
 
-func SetDynamicHandlers() {
-	urls := url.GetUrls()
+	api.SetApiHandlers(r)
 
-	for _, url := range urls {
-		fmt.Println(url)
-		http.HandleFunc(url.Url, DynamicHandler)
-	}
-}
-
-func DynamicHandler(w http.ResponseWriter, r *http.Request) {
-	temp := template.Must(template.ParseFiles(Constants.DynamicTemplate))
-
-	//Get the id from url
-	id := r.Header.Get("Url")
-	fmt.Println("Post Id: " + id)
-
-	//Make GET request to get title, date, and body
-	response, err := http.Get("http://localhost:8080/getpost/" + id)
-	if err != nil {
-		fmt.Println("Error: GET request in Post endpoint")
-	}
-	defer response.Body.Close()
-
-	post := api.DecodePost(response)
-	temp.Execute(w, post)
+	Serve = r
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Info: hitting Home endpoint")
 	temp := template.Must(template.ParseFiles(Constants.HomeTemplate))
 	temp.Execute(w, nil)
 }
 
 func AboutMe(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Info: hitting AboutMe endpoint")
 	temp := template.Must(template.ParseFiles(Constants.AboutMeTemplate))
 	temp.Execute(w, nil)
 }
 
-func Previews(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Info: hitting Previews endpoint")
-	temp := template.Must(template.ParseFiles(Constants.PreviewTemplate))
+func Posts(w http.ResponseWriter, r *http.Request) {
+	temp := template.Must(template.ParseFiles(Constants.PostsTemplate))
 
-	//Make a GET request to receive data
 	//Will be a lists of Previews (obj) that store the title, date, and summary
-	response, err := http.Get(Constants.LocalUrl + Constants.GetPreviewsApiUrl)
+	apiUrl := Constants.LocalUrl + Constants.GetPostsApiUrl
+
+	response, err := http.Get(apiUrl)
+	if err != nil {
+		fmt.Println("Error: GET request in Posts endpoint")
+	}
+	defer response.Body.Close()
+
+	preview := api.DecodePreview(response)
+	temp.Execute(w, preview)
+}
+
+func Post(w http.ResponseWriter, r *http.Request) {
+	temp := template.Must(template.ParseFiles("templates/post.page.go.tmpl"))
+
+	title := mux.Vars(r)["title"]
+
+	apiUrl := Constants.LocalUrl + Constants.GetPostUrl + title
+
+	response, err := http.Get(apiUrl)
 	if err != nil {
 		fmt.Println("Error: GET request in Previews endpoint")
 	}
 	defer response.Body.Close()
 
-	preview := api.DecodePreview(response)
-	fmt.Println(preview)
-	temp.Execute(w, preview)
-}
-
-func Post(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Info: hitting Post endpoint")
-	temp := template.Must(template.ParseFiles("templates/post.page.tmpl"))
-
-	//Get the id from url
-	id := r.Header.Get("id")
-	fmt.Println("Post Id: " + id)
-
-	//Make GET request to get title, date, and body
-	response, err := http.Get("http://localhost:8080/getpost/" + id)
-	if err != nil {
-		fmt.Println("Error: GET request in Post endpoint")
-	}
-	defer response.Body.Close()
-
 	post := api.DecodePost(response)
+
 	temp.Execute(w, post)
 }
