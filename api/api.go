@@ -12,6 +12,7 @@ import (
 func SetApiHandlers(r *mux.Router) {
 	r.HandleFunc("/getposts/", GetPosts)
 	r.HandleFunc("/getpost/{title}", GetPost)
+	r.HandleFunc("/newurl", NewUrl).Methods("POST")
 }
 
 func DecodePosts(response *http.Response) []Posts {
@@ -73,6 +74,10 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Error: Not a GET request in GetPreviews api call")
 	}
+}
+
+func NewUrl(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Hitting new url endpoint")
 }
 
 type PostsPacket struct {

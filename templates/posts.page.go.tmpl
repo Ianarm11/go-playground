@@ -12,5 +12,10 @@
 <a href="http://localhost:8080/posts/{{.Url}}/">Title: {{.Title}} Date: {{.Date}} Summary: {{.Summary}}</a>
 <br>
 {{end}}
+<form method="POST" action="/newurl">
+    <label>Url: </label><br />
+    <input type="text" name="url"><br />
+    <input type="submit">
+</form>
 </body>
 </html>

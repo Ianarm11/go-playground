@@ -46,7 +46,6 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	defer response.Body.Close()
 
 	posts := api.DecodePosts(response)
-	fmt.Println(posts)
 
 	temp.Execute(w, posts)
 }
