@@ -37,7 +37,6 @@ func AboutMe(w http.ResponseWriter, r *http.Request) {
 func Posts(w http.ResponseWriter, r *http.Request) {
 	temp := template.Must(template.ParseFiles(Constants.PostsTemplate))
 
-	//Will be a lists of Previews (obj) that store the title, date, and summary
 	apiUrl := Constants.LocalUrl + Constants.GetPostsApiUrl
 
 	response, err := http.Get(apiUrl)
@@ -46,8 +45,10 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	preview := api.DecodePreview(response)
-	temp.Execute(w, preview)
+	posts := api.DecodePosts(response)
+	fmt.Println(posts)
+
+	temp.Execute(w, posts)
 }
 
 func Post(w http.ResponseWriter, r *http.Request) {

@@ -14,14 +14,14 @@ func SetApiHandlers(r *mux.Router) {
 	r.HandleFunc("/getpost/{title}", GetPost)
 }
 
-func DecodePreview(response *http.Response) Preview {
+func DecodePosts(response *http.Response) []Posts {
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		fmt.Println("Error: Not reading response body")
 	}
-	var Preview Preview
-	json.Unmarshal([]byte(body), &Preview)
-	return Preview
+	var posts []Posts
+	json.Unmarshal([]byte(body), &posts)
+	return posts
 }
 
 func DecodePost(response *http.Response) Post {
@@ -38,11 +38,15 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 
 		//Make DB call to get data. Using dummy data now
-		packet := PreviewPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert"}
+		packet := PostsPacket{Title: "Bronze Age Mindset", Date: 03122022, Summary: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert"}
+		packet2 := PostsPacket{Title: "Zero To One", Date: 07052023, Summary: "Going zero to one is good.", Id: "2", Url: "zerotoone"}
 
-		//Send out the encoded data
+		var packets []PostsPacket
+		packets = append(packets, packet)
+		packets = append(packets, packet2)
+
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(packet)
+		json.NewEncoder(w).Encode(packets)
 		return
 	} else {
 		fmt.Println("Error: Not a GET request in GetPreviews api call")
@@ -51,21 +55,27 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 
 func GetPost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		//title := mux.Vars(r)["title"]
+		title := mux.Vars(r)["title"]
+
+		w.Header().Set("Content-Type", "application/json")
 
 		//Make DB call to get data. Using dummy data now
 		packet := PostPacket{Title: "Bronze Age Mindset", Date: 03122022, Body: "A journey past the bugmen's cruel world.", Id: "1", Url: "bronzeagepervert"}
+		packet2 := PostPacket{Title: "Zero To One", Date: 07052023, Body: "Going zero to one is good.", Id: "2", Url: "zerotoone"}
 
-		//Send out the encoded data
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(packet)
+		if title == packet2.Url {
+			json.NewEncoder(w).Encode(packet2)
+		} else if title == packet.Url {
+			json.NewEncoder(w).Encode(packet)
+		}
+
 		return
 	} else {
 		fmt.Println("Error: Not a GET request in GetPreviews api call")
 	}
 }
 
-type PreviewPacket struct {
+type PostsPacket struct {
 	Title   string `json:"title"`
 	Date    int    `json:"date"`
 	Summary string `json:"summary"`
@@ -81,7 +91,7 @@ type PostPacket struct {
 	Url   string `json:"url"`
 }
 
-type Preview struct {
+type Posts struct {
 	Title   string
 	Date    int
 	Summary string
