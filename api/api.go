@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	Constants "go-playground/go-playground/constants"
 	"io/ioutil"
 	"net/http"
 
@@ -77,7 +78,38 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewUrl(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hitting new url endpoint")
+	if r.Method == "POST" {
+		//Do error handling
+		r.ParseForm()
+
+		//Get value(s) from form
+		//Initial Validations!!
+		url := r.FormValue("url")
+		//Do validation(s)
+
+		//Deserialize it into a struct? Probably
+		// newPost := Post{
+		// 	Title: "test title",
+		// 	Url:   url,
+		// 	Id:    "test guid",
+		// 	Date:  12032023,
+		// 	Body:  "test body",
+		// }
+
+		//Send to "DB" (post request)
+		//DB Validations!!!
+
+		//Make POST request to Post page
+		// postBody, err := json.Marshal(newPost)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		//responseBody := bytes.NewBuffer(postBody)
+
+		apiUrl := Constants.LocalUrl + "posts/" + url + "/"
+		http.Get(apiUrl)
+		return
+	}
 }
 
 type PostsPacket struct {

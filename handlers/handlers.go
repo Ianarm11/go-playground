@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	api "go-playground/go-playground/api"
 	Constants "go-playground/go-playground/constants"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 
 	mux "github.com/gorilla/mux"
@@ -52,18 +54,34 @@ func Posts(w http.ResponseWriter, r *http.Request) {
 
 func Post(w http.ResponseWriter, r *http.Request) {
 	temp := template.Must(template.ParseFiles("templates/post.page.go.tmpl"))
+	var post api.Post
 
-	title := mux.Vars(r)["title"]
+	if r.Method == "GET" {
+		title := mux.Vars(r)["title"]
 
-	apiUrl := Constants.LocalUrl + Constants.GetPostUrl + title
+		//Validation to check if title is in DB, right now any page will be created
 
-	response, err := http.Get(apiUrl)
-	if err != nil {
-		fmt.Println("Error: GET request in Previews endpoint")
+		apiUrl := Constants.LocalUrl + Constants.GetPostUrl + title
+
+		response, err := http.Get(apiUrl)
+		if err != nil {
+			fmt.Println("Error: GET request in Previews endpoint")
+		}
+		defer response.Body.Close()
+
+		post = api.DecodePost(response)
+
+	} else if r.Method == "POST" {
+		fmt.Println("Hitting Post POST logic")
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		json.Unmarshal([]byte(body), &post)
+		fmt.Println("Unmarshalled body: ")
+		defer r.Body.Close()
 	}
-	defer response.Body.Close()
-
-	post := api.DecodePost(response)
-
+	fmt.Println(post)
 	temp.Execute(w, post)
 }
