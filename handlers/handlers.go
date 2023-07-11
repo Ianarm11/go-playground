@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
-	api "go-playground/go-playground/api"
+	"go-playground/go-playground/api"
+	Api "go-playground/go-playground/api"
 	Constants "go-playground/go-playground/constants"
+	Models "go-playground/go-playground/models"
 	"html/template"
-	"io/ioutil"
 	"net/http"
 
 	mux "github.com/gorilla/mux"
@@ -21,7 +21,7 @@ func SetHandlers(r *mux.Router) {
 	r.HandleFunc("/posts/", Posts)
 	r.HandleFunc("/posts/{title}/", Post)
 
-	api.SetApiHandlers(r)
+	Api.SetApiHandlers(r)
 
 	Serve = r
 }
@@ -37,30 +37,31 @@ func AboutMe(w http.ResponseWriter, r *http.Request) {
 }
 
 func Posts(w http.ResponseWriter, r *http.Request) {
-	temp := template.Must(template.ParseFiles(Constants.PostsTemplate))
+	if r.Method == "GET" {
+		temp := template.Must(template.ParseFiles(Constants.PostsTemplate))
 
-	apiUrl := Constants.LocalUrl + Constants.GetPostsApiUrl
+		apiUrl := Constants.LocalUrl + Constants.GetPostsApiUrl
 
-	response, err := http.Get(apiUrl)
-	if err != nil {
-		fmt.Println("Error: GET request in Posts endpoint")
+		response, err := http.Get(apiUrl)
+		if err != nil {
+			fmt.Println("Error: GET request in Posts endpoint")
+		}
+		defer response.Body.Close()
+
+		posts := api.DecodePosts(response)
+
+		temp.Execute(w, posts)
 	}
-	defer response.Body.Close()
-
-	posts := api.DecodePosts(response)
-
-	temp.Execute(w, posts)
 }
 
 func Post(w http.ResponseWriter, r *http.Request) {
 	temp := template.Must(template.ParseFiles("templates/post.page.go.tmpl"))
-	var post api.Post
+	var post Models.Post
 
 	if r.Method == "GET" {
 		title := mux.Vars(r)["title"]
 
 		//Validation to check if title is in DB, right now any page will be created
-
 		apiUrl := Constants.LocalUrl + Constants.GetPostUrl + title
 
 		response, err := http.Get(apiUrl)
@@ -69,19 +70,7 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		}
 		defer response.Body.Close()
 
-		post = api.DecodePost(response)
-
-	} else if r.Method == "POST" {
-		fmt.Println("Hitting Post POST logic")
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		json.Unmarshal([]byte(body), &post)
-		fmt.Println("Unmarshalled body: ")
-		defer r.Body.Close()
+		post = Api.DecodePost(response)
+		temp.Execute(w, post)
 	}
-	fmt.Println(post)
-	temp.Execute(w, post)
 }

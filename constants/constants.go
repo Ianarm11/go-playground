@@ -9,3 +9,5 @@ var LocalUrl string = "http://localhost:8080/"
 
 var GetPostsApiUrl string = "getposts/"
 var GetPostUrl string = "getpost/"
+
+var Database string = "db/temp_db.json"
