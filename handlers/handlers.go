@@ -20,6 +20,7 @@ func SetHandlers(r *mux.Router) {
 	r.HandleFunc("/aboutme/", AboutMe)
 	r.HandleFunc("/posts/", Posts)
 	r.HandleFunc("/posts/{title}/", Post)
+	r.HandleFunc("/createpost/", CreatePost)
 
 	Api.SetApiHandlers(r)
 
@@ -73,4 +74,10 @@ func Post(w http.ResponseWriter, r *http.Request) {
 		post = Api.DecodePost(response)
 		temp.Execute(w, post)
 	}
+}
+
+func CreatePost(w http.ResponseWriter, r *http.Request) {
+	temp := template.Must(template.ParseFiles("templates/newpost.page.go.tmpl"))
+
+	temp.Execute(w, nil)
 }
