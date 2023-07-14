@@ -16,6 +16,7 @@ func SetApiHandlers(r *mux.Router) {
 	r.HandleFunc("/getposts/", GetPosts)
 	r.HandleFunc("/getpost/{title}", GetPost)
 	r.HandleFunc("/newurl", NewUrl).Methods("POST")
+	r.HandleFunc("/moreposts", MorePosts)
 }
 
 func DecodePosts(response *http.Response) []Models.Posts {
@@ -99,4 +100,17 @@ func NewUrl(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, redirectUrl, 303)
 	}
+}
+
+func MorePosts(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("HTMX must be working!")
+
+	if r.Method == "GET" {
+		fmt.Println("GET request made?")
+	}
+
+	if r.Method == "POST" {
+		fmt.Println("It's a post request!")
+	}
+
 }
