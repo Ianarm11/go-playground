@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+      <script src="https://cdn.tailwindcss.com"></script>
     <title>Info</title>
 </head>
 <body>
-<h1>Posts</h1>
+<h1 class="text-3xl font-bold underline">
+    Posts!
+</h1>
+<br>
 <h2>Here you can find all my past work</h2>
-{{range .}}
-<a href="http://localhost:8080/posts/{{.Url}}/">Title: {{.Title}} Date: {{.Date}} Summary: {{.Summary}}</a>
 <br>
-{{end}}
-<br>
-<div hx-post="/moreposts" hx-trigger="mouseenter">
-<h4>Inside the div </h4>
+
+<div class="columns-1"> 
+    <div class="w-full">
+        <p>Column 1</p>
+    </div>
+
+    <div class="w-full">
+        {{range .}}
+        <a href="http://localhost:8080/posts/{{.Url}}/">Title: {{.Title}} Date: {{.Date}} Summary: {{.Summary}}</a>
+        <br>
+        {{end}}
+        <br>
+    </div>
 </div>
+
+<div hx-post="/moreposts" hx-trigger="mouseenter">
+    <h4>Inside the div </h4>
+</div>
+
 </body>
 </html>
