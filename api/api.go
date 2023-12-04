@@ -1,7 +1,5 @@
 package api
 
-//Test commit
-
 import (
 	"encoding/json"
 	"fmt"
