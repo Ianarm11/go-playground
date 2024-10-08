@@ -1,21 +1,16 @@
 package main
 
 import (
-	"fmt"
-	h "go-playground/go-playground/handlers"
-	"net/http"
-
-	mux "github.com/gorilla/mux"
+	"go-playground/go-playground/gregoriancalendar"
 )
 
-const portNumber = ":8080"
-
 func main() {
-	r := mux.NewRouter()
-	h.SetHandlers(r)
+	var day int
+	var month int
+	var year int
+	day = 8
+	month = 10
+	year = 2024
 
-	err := http.ListenAndServe(portNumber, r)
-	if err != nil {
-		fmt.Println("ListenAndServe: ", err)
-	}
+	gregoriancalendar.GregorianCalendar(day, month, year)
 }

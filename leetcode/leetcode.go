@@ -13,6 +13,7 @@ func LeetCode() {
 	//nums := []int{0,1,2,0,3,4,5,0,6,7,0,8,9}
 	LengthOfLongestSubstring("abcacbbcbbdfghjik")
 }
+
 //***QUESTIONS****//
 
 func CheckIfPalindrome(str string) bool {
@@ -88,7 +89,7 @@ func NextPermutation(nums []int) []int {
 	return permutation
 }
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	dummyHead:= ListNode{0, nil}
+	dummyHead := ListNode{0, nil}
 	current := &dummyHead
 
 	p := l1
@@ -130,8 +131,8 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 }
 func BinarySearch(nums []int, target int) int {
 	low := 0
-	high := len(nums)-1
-	middle := low + (high - low) / 2
+	high := len(nums) - 1
+	middle := low + (high-low)/2
 	result := -1
 
 	for low <= high {
@@ -163,7 +164,7 @@ func UnknownSizeSearch(nums []int, target int) int {
 	}
 
 	for low <= high {
-		middle := low + (high - low) / 2
+		middle := low + (high-low)/2
 		if nums[middle] == target {
 			return middle
 		} else if nums[middle] < target {
@@ -174,7 +175,7 @@ func UnknownSizeSearch(nums []int, target int) int {
 	}
 	return result
 }
-func MoveZeros(nums []int)  {
+func MoveZeros(nums []int) {
 	fmt.Println("Original:  ", nums)
 	num1 := make([]int, len(nums))
 	copy(num1, nums)
@@ -206,10 +207,10 @@ func TwoSum(numbers []int, target int) []int {
 	indexes := make([]int, 2)
 
 	for i := 0; i < len(numbers); i++ {
-		for j := i+1; j < len(numbers); j++ {
-			if numbers[i] + numbers[j] == target {
-				indexes[0] = i+1
-				indexes[1] = j+1
+		for j := i + 1; j < len(numbers); j++ {
+			if numbers[i]+numbers[j] == target {
+				indexes[0] = i + 1
+				indexes[1] = j + 1
 			}
 		}
 	}
@@ -265,7 +266,6 @@ func LengthOfLongestSubstring(s string) int {
 	return bestSol
 }
 
-
 //***HELPER FUNCTIONS****//
 
 func RemoveElementByIndex(x []int, index int) []int {
@@ -302,5 +302,27 @@ func Max(num1, num2 int) int {
 	}
 	return num2
 }
+func TopKFrequent(nums []int, k int) []int {
+	myMap := make(map[int]int)
 
+	for _, val := range nums {
+		myMap[val]++
+	}
 
+	//Loop through k amount of times
+	var numbers []int
+	for i := 0; i < k; i++ {
+		//Get highest count, then remove that entry from map
+		var maxValue int
+		var maxKey int
+		for key, value := range myMap {
+			if value > maxValue {
+				maxKey = key
+				maxValue = value
+			}
+		}
+		numbers = append(numbers, maxKey)
+		delete(myMap, maxKey)
+	}
+	return numbers
+}
