@@ -13,6 +13,7 @@ func GregorianCalendar(Day int, Month int, Year int) {
 	fmt.Println(result)
 }
 
+//Anchor Day is Thursday, January 1st, 1970
 // Helper functions
 
 /*
